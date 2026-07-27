@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>Add Doctor</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">
+            Save Doctor
+        </button>
+
+        <a href="{% url 'view_doctor' %}" class="btn btn-secondary">
+            View Doctors
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}
