@@ -3,7 +3,7 @@ from .models import registration
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = registration
-        fields=['username','email','password']
+        fields=['username','email','password','role']
 
     def clean_username(self):
         username=self.cleaned_data['username']
@@ -51,3 +51,20 @@ class MedicineForm(forms.ModelForm):
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
         }
         
+from .models import MedicalReport
+class MedicalReportForm(forms.ModelForm):
+
+    class Meta:
+        model = MedicalReport
+        fields = [
+            'report_title',
+            'report_type',
+            'report_file'
+        ]
+
+from .models import Billing
+class BillingForm(forms.ModelForm):
+
+    class Meta:
+        model = Billing
+        exclude = ['total_amount', 'bill_date']

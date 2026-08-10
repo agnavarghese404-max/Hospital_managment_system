@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h2 class="text-center text-success mb-4">
+                Hospital Billing Receipt
+            </h2>
+            <p><strong>Receipt No:</strong> BILL-{{ bill.id|stringformat:"04d" }}</p>
+
+            <hr>
+
+            <p><strong>Patient:</strong> {{ bill.appointment.patient.patient_name }}</p>
+
+            <p><strong>Doctor:</strong> Dr. {{ bill.appointment.doctor.doctor_name }}</p>
+
+            <p><strong>Bill Date:</strong> {{ bill.bill_date|date:"d M Y" }}</p>
+
+            <hr>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Consultation Fee</th>
+                    <td>₹ {{ bill.consultation_fee }}</td>
+                </tr>
+
+                <tr>
+                    <th>Medicine Cost</th>
+                    <td>₹ {{ bill.medicine_cost }}</td>
+                </tr>
+
+                <tr class="table-success fw-bold">
+                    <th>Total Amount</th>
+                    <td><strong>₹ {{ bill.total_amount }}</strong></td>
+                </tr>
+
+            </table>
+            <hr>
+            <p class="text-center text-success fw-bold fs-5">
+                Thank You for Visiting!
+            </p>
+            <p class="text-center text-muted">
+                We wish you good health and a speedy recovery.
+            </p>
+
+            <div class="text-center mt-4">
+
+                <a href="{% url 'view_billing' %}" class="btn btn-secondary">
+                    Back
+                </a>
+
+                <button onclick="window.print()" class="btn btn-success">
+                    Print Receipt
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

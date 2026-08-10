@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        <i class="bi bi-file-earmark-medical-fill text-primary"></i>
+        Medical Records - {{ patient.patient_name }}
+    </h2>
+
+    <div class="mb-3">
+        <a href="{% url 'add_medical_report' patient.id %}" class="btn btn-success">
+            <i class="bi bi-upload"></i> Upload New Report
+        </a>
+
+        <a href="{% url 'view_patient' %}" class="btn btn-secondary">
+            Back to Patients
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-primary">
+            <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Uploaded On</th>
+                <th>Report</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for report in reports %}
+            <tr>
+
+                <td>{{ report.report_title }}</td>
+
+                <td>{{ report.report_type }}</td>
+
+                <td>{{ report.uploaded_at|date:"d M Y" }}</td>
+
+                <td>
+                    
+                        <a href="{{ report.report_file.url }}"
+                            target="_blank"
+                            class="btn btn-primary btn-sm">
+                                View
+                        </a>
+                        <a href="{{ report.report_file.url }}"
+                            download
+                            class="btn btn-success btn-sm">
+                                Download
+                        </a>
+                </td>
+
+                <td>
+                    <a href="{% url 'delete_medical_report' report.id %}"
+                        class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="5" class="text-center">
+                    No medical reports uploaded.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

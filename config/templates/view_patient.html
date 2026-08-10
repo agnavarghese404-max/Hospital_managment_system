@@ -4,7 +4,27 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">Patient List</h2>
+    <h2 class="fw-bold mb-4">
+        <i class="bi bi-people-fill text-primary"></i> Patient List
+    </h2>
+
+    <form method="GET" class="mb-3">
+        <div class="input-group">
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="🔍 Search patient by name..."
+                value="{{ request.GET.search }}">
+
+            <button class="btn btn-primary" type="submit">
+                Search
+            </button>
+            <a href="{% url 'view_patient' %}" class="btn btn-secondary">
+                Reset
+            </a>
+        </div>
+    </form>
 
     <table class="table table-bordered table-striped table-hover">
         <thead class="table-primary">
@@ -15,8 +35,14 @@
                 <th>Gender</th>
                 <th>Phone</th>
                 <th>Disease</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                {% if role == "Admin" or role == "Doctor" %}
+                    <th>Medical Records</th>
+                {% endif %}
+                
+                {% if role == "Admin" or role == "Receptionist" %}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                {% endif %}
             </tr>
         </thead>
 
@@ -29,13 +55,23 @@
                 <td>{{ patient.gender }}</td>
                 <td>{{ patient.phone }}</td>
                 <td>{{ patient.disease }}</td>
+                {% if role == "Admin" or role == "Doctor" %}
+                <td>
+                    <a href="{% url 'patient_reports' patient.id %}" class="btn btn-info btn-sm">
+                        <i class="bi bi-file-earmark-medical"></i> Records
+                    </a>
+                </td>
+                {% endif %}
 
+                {% if role == "Admin" or role == "Receptionist" %}
                 <td>
                     <a href="{% url 'edit_patient' patient.id %}" class="btn btn-warning btn-sm">
                         Edit
                     </a>
                 </td>
+                {% endif %}
 
+                {% if role == "Admin" or role == "Receptionist" %}
                 <td>
                     <a href="{% url 'delete_patient' patient.id %}"
                        class="btn btn-danger btn-sm"
@@ -43,10 +79,11 @@
                         Delete
                     </a>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
-                <td colspan="8" class="text-center">
+                <td colspan="9" class="text-center">
                     No patients found.
                 </td>
             </tr>

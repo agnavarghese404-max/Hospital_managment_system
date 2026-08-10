@@ -3,51 +3,66 @@
 {% block content %}
 
 <div class="container mt-5">
-
-    <div class="text-center mb-5">
-        <h2>Hospital Management System</h2>
-        <h5 class="text-muted">Welcome {{ name }}</h5>
+    <div class="mb-4">
+        <h2 class="fw-bold">Dashboard</h2>
+        <p class="text-muted mb-0">
+            Welcome back, <strong>{{ name }}</strong> 👋
+        </p>
+        <h5>Role: {{ role }}</h5>
     </div>
-
     <div class="row g-4">
 
         <div class="col-md-3">
-            <div class="card shadow text-center h-100">
+            <div class="card border-0 shadow-lg text-center h-100 rounded-4">
                 <div class="card-body">
-                    <h1>👤</h1>
+                    <i class="bi bi-people-fill display-4 text-primary"></i>
+                    <h2 class="fw-bold">{{ patient_count }}</h2>
                     <h5>Patients</h5>
-                    <a href="{% url 'add_patient' %}" class="btn btn-success btn-sm m-1">Add</a>
+                    {% if role == "Admin" or role == "Receptionist" %}
+                        <a href="{% url 'add_patient' %}" class="btn btn-success btn-sm m-1">Add</a>
+                    {% endif %}
                     <a href="{% url 'view_patient' %}" class="btn btn-primary btn-sm m-1">View</a>
                 </div>
             </div>
         </div>
 
+        {% if role == "Admin" or role == "Receptionist" %}
         <div class="col-md-3">
-            <div class="card shadow text-center h-100">
+            <div class="card border-0 shadow-lg text-center h-100 rounded-4">
                 <div class="card-body">
-                    <h1>👨‍⚕️</h1>
+                    <i class="bi bi-person-badge-fill display-4 text-success"></i>
+                    <h2 class="fw-bold">{{ doctor_count }}</h2>
                     <h5>Doctors</h5>
                     <a href="{% url 'add_doctor' %}" class="btn btn-success btn-sm m-1">Add</a>
                     <a href="{% url 'view_doctor' %}" class="btn btn-primary btn-sm m-1">View</a>
                 </div>
             </div>
         </div>
+        {% endif %}
+
 
         <div class="col-md-3">
-            <div class="card shadow text-center h-100">
+            <div class="card border-0 shadow-lg text-center h-100 rounded-4">
                 <div class="card-body">
-                    <h1>📅</h1>
-                    <h5>Appointments</h5>
-                    <a href="{% url 'add_appointment' %}" class="btn btn-success btn-sm m-1">Book</a>
+                    <i class="bi bi-calendar-check-fill display-4 text-warning"></i>
+                    <h2 class="fw-bold">{{ appointment_count }}</h2>
+                    <h5 class="fs-6 text-nowrap">Appointments</h5>
+                    {% if role == "Admin" or role == "Receptionist" %}
+                        <a href="{% url 'add_appointment' %}" class="btn btn-success btn-sm m-1">Book</a>
+                    {% endif %}
                     <a href="{% url 'view_appointment' %}" class="btn btn-primary btn-sm m-1">View</a>
                 </div>
             </div>
         </div>
 
+
+        {% if role == "Admin" %}
+
         <div class="col-md-3">
-            <div class="card shadow text-center h-100">
+            <div class="card border-0 shadow-lg text-center h-100 rounded-4">
                 <div class="card-body">
-                    <h1>💊</h1>
+                    <i class="bi bi-capsule-pill display-4 text-danger"></i>
+                    <h2 class="fw-bold">{{ medicine_count }}</h2>
                     <h5>Pharmacy</h5>
                     <a href="{% url 'add_medicine' %}" class="btn btn-success btn-sm m-1">Add</a>
                     <a href="{% url 'view_medicine' %}" class="btn btn-primary btn-sm m-1">View</a>
@@ -55,14 +70,141 @@
             </div>
         </div>
 
+        {% endif %}
+
+
+        {% if role == "Admin" or role == "Receptionist" %}
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow border-0 text-center p-3">
+
+                <div class="card-body">
+
+                    <i class="bi bi-receipt-cutoff display-4 text-success"></i>
+
+                    <h2>{{ billing_count }}</h2>
+
+                    <h3>Billing</h3>
+
+                    <a href="{% url 'add_billing' %}" class="btn btn-success btn-sm">
+                        Generate
+                    </a>
+
+                    <a href="{% url 'view_billing' %}" class="btn btn-primary btn-sm">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+        {% endif %}
+
+<div class="card shadow-lg border-0 rounded-4 mt-5">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-clock-history"></i> Recent Appointments
+        </h5>
     </div>
 
-    <div class="text-center mt-5">
-        <a href="{% url 'logout' %}" class="btn btn-danger">
-            Logout
-        </a>
-    </div>
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
 
+            <tbody>
+                {% for appointment in recent_appointments %}
+                <tr>
+                    <td>{{ appointment.patient }}</td>
+                    <td>{{ appointment.doctor }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.appointment_time }}</td>
+                    <td>
+                        {% if appointment.status == "Confirmed" %}
+                            <span class="badge bg-success">
+                                {{ appointment.status }}
+                            </span>
+
+                        {% elif appointment.status == "Pending" %}
+                            <span class="badge bg-warning text-dark">
+                                {{ appointment.status }}
+                            </span>
+
+                        {% elif appointment.status == "Cancelled" %}
+                            <span class="badge bg-danger">
+                                {{ appointment.status }}
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                {{ appointment.status }}
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No appointments found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
+{% if role == "Admin" or role == "Receptionist" %}
+<div class="card shadow-lg border-0 rounded-4 mt-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-lightning-charge-fill"></i> Quick Actions
+        </h5>
+    </div>
+
+    <div class="card-body text-center">
+        {% if role == "Admin" or role == "Receptionist" %}
+        <a href="{% url 'add_patient' %}" class="btn btn-primary m-2">
+            <i class="bi bi-person-plus-fill"></i> Add Patient
+        </a>
+        {% endif %}
+
+        {% if role == "Admin" or role == "Receptionist" %}
+        <a href="{% url 'add_doctor' %}" class="btn btn-success m-2">
+            <i class="bi bi-person-badge-fill"></i> Add Doctor
+        </a>
+        {% endif %}
+
+        {% if role == "Admin" or role == "Receptionist" %}
+        <a href="{% url 'add_appointment' %}" class="btn btn-warning m-2">
+            <i class="bi bi-calendar-plus-fill"></i> Book Appointment
+        </a>
+        {% endif %}
+
+        {% if role == "Admin" %}
+        <a href="{% url 'add_medicine' %}" class="btn btn-danger m-2">
+            <i class="bi bi-capsule-pill"></i> Add Medicine
+        </a>
+        {% endif %}
+
+        {% if role == "Admin" or role == "Receptionist" %}
+
+        <a href="{% url 'add_billing' %}" class="btn btn-primary m-2">
+            <i class="bi bi-receipt"></i> Generate Bill
+        </a>
+
+        {% endif %}
+
+    </div>
+</div>
+{% endif %}
 {% endblock %}
+
