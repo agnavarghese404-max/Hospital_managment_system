@@ -116,7 +116,27 @@ Hospital-Management-System/
 └── README.md
 ```
 
-## Screenshots
+---
+
+## ▶️ How to Run
+
+```bash
+git clone https://github.com/agnavarghese404-max/Hospital_managment_system.git
+cd Hospital_managment_system
+python -m venv env
+env\Scripts\activate
+pip install django
+cd config
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+Open `http://127.0.0.1:8000/` in your browser.
+
+---
+
+## 📸 Screenshots
 
 ### Admin Dashboard
 ![Admin Dashboard](screenshots/admin1.png)
@@ -126,19 +146,52 @@ Hospital-Management-System/
 
 ### Receptionist Dashboard
 ![Receptionist Dashboard](screenshots/receptionist.png)
-### Admin: View, Add and Edit Pages
 
-The Admin can see, add and edit everything in the system: patients, doctors, appointments, medicines, medical reports and billing.
+### Patient List
+![Patient List](screenshots/screenshot2.png)
 
-![Admin page 1](screenshots/screenshot2.png)
-![Admin page 2](screenshots/screenshot3.png)
-![Admin page 3](screenshots/screenshot4.png)
-![Admin page 4](screenshots/screenshot5.png)
-![Admin page 5](screenshots/screenshot6.png)
-![Admin page 6](screenshots/screenshot7.png)
-![Admin page 7](screenshots/screenshot8.png)
-![Admin page 8](screenshots/screenshot9.png)
-![Admin page 9](screenshots/screenshot10.png)
-![Admin page 10](screenshots/screenshot11.png)
-![Admin page 11](screenshots/screenshot12.png)
-![Admin page 12](screenshots/screenshot13.png)
+### Doctor List
+![Doctor List](screenshots/screenshot3.png)
+
+### Appointment List
+![Appointment List](screenshots/screenshot4.png)
+
+### Medicine List
+![Medicine List](screenshots/screenshot5.png)
+
+### Billing Records
+![Billing Records](screenshots/screenshot6.png)
+
+### Add Patient
+![Add Patient](screenshots/screenshot7.png)
+
+### Add Doctor
+![Add Doctor](screenshots/screenshot8.png)
+
+### Book Appointment
+![Book Appointment](screenshots/screenshot9.png)
+
+### Add Medicine
+![Add Medicine](screenshots/screenshot10.png)
+
+### Add Billing
+![Add Billing](screenshots/screenshot11.png)
+
+### Patient Medical Records
+![Patient Medical Records](screenshots/screenshot12.png)
+
+### Register Staff (Admin only)
+![Register Staff](screenshots/screenshot13.png)
+
+---
+
+## 🎯 Future Improvements
+
+- Online payment for billing
+- Laboratory module
+- Prescription management
+- Email notifications
+- PDF report generation
+- Filters for appointments by date or status
+- Patient login portal
+- REST API using Django REST Framework
